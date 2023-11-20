@@ -60,7 +60,7 @@ data:
 
 ### Create an Issuer
 The issuer will use the PDNS webhook to validate our record. Only replace your email address in the manifest to connect to our Previder Portal account.  
-_Use the [letsEncrypt Staging environment](https://letsencrypt.org/docs/staging-environment/) when testing._
+_Use the [LetsEncrypt Staging environment](https://letsencrypt.org/docs/staging-environment/) when testing._
 ```shell
 apiVersion: cert-manager.io/v1
 kind: Issuer
