@@ -5,7 +5,7 @@ This example will install the [CSI driver NFS](https://github.com/kubernetes-csi
 **Notice:** Using this CSI driver, you will get access to the NFS volume root and using the Deployment settings determine a path inside. This can be a security issue.  
 
 ### Install the CSI driver NFS
-Follow the [installation guide](https://github.com/kubernetes-csi/csi-driver-nfs/tree/master/charts) of the CSI driver NFS, of execute the commands below.
+Follow the [installation guide](https://github.com/kubernetes-csi/csi-driver-nfs/tree/master/charts) of the CSI driver NFS, or execute the commands below.
 
 ```shell
 helm repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
