@@ -75,7 +75,7 @@ kubectl get serviceaccount --namespace headlamp
 
 Create a token directly for the service account:
 ```shell
-kubectl create token headlamp-admin --namespace headlamp
+kubectl create token headlamp --namespace headlamp
 ```
 
 Use this token to access Headlamp.
