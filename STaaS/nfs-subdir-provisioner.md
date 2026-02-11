@@ -11,6 +11,7 @@ helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs
     --create-namespace \
     --set nfs.server=<NFS endpoint> \
     --set nfs.path=<NFS path> \
+    --set nfs.mountOptions[0]="nfsvers=3" \
     --set storageClass.name=previder-staas
 ```
 The output of the command should look similar to this:

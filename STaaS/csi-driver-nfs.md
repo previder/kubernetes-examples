@@ -12,6 +12,7 @@ helm repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/cs
 helm install csi-driver-nfs csi-driver-nfs/csi-driver-nfs \
     --namespace previder-staas \
     --create-namespace \
+    --set storageClass.mountOptions[0]="nfsvers=3" \
     --version v4.5.0
 ```
 
