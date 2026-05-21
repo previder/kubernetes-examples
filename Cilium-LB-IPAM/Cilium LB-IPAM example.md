@@ -44,9 +44,18 @@ kubectl -n kube-system patch configmap cilium-config \
   --type merge \
   -p '{"data":{"enable-l2-announcements":"true"}}'
 ```
-This ensures that Cilium can advertise LoadBalancer IPs at Layer 2.
+Then restart Cilium to activate the change:
 
-## Add RBAC permissions for L2 lease management
+```bash
+kubectl -n kube-system rollout restart ds/cilium
+```
+
+Finally, verify that the EnableL2Announcements variable is set to "true":
+```bash
+kubectl -n kube-system exec ds/cilium -- cilium-dbg config --all | grep EnableL2Announcements
+```
+
+## 2. Add RBAC permissions for L2 lease management
 
 Cilium requires access to **leases.coordination.k8s.io** in the **kube-system** namespace to claim the L2 announcement lease.
 The default **ClusterRole cilium** does not include these permissions, which prevents Cilium from claiming the lease.
@@ -67,18 +76,8 @@ kubectl patch clusterrole cilium --type='json' -p '
 ]
 '
 ```
-Then restart Cilium to activate the change:
 
-```bash
-kubectl -n kube-system rollout restart ds/cilium
-```
-
-Finally, verify that the EnableL2Announcements variable is set to "true":
-```bash
-kubectl -n kube-system exec ds/cilium -- cilium-dbg config --all | grep EnableL2Announcements
-```
-
-## 2. LoadBalancer IP Pool (CiliumLoadBalancerIPPool)
+## 3. LoadBalancer IP Pool (CiliumLoadBalancerIPPool)
 
 Define the IP range that Cilium can use for assigning LoadBalancer services. This must be in the same range that de firewall DHCP server uses, but the adresses cannot be part of the DHCP pool that is configured.
 
@@ -97,7 +96,7 @@ spec:
 
 ---
 
-## 3. L2 Announcement Policy
+## 4. L2 Announcement Policy
 
 ```yaml
 apiVersion: cilium.io/v2alpha1
@@ -121,7 +120,7 @@ spec:
 
 ---
 
-## 4. Hello Kubernetes Deployment
+## 5. Hello Kubernetes Deployment
 For testing deploy a simple Hello Kubernetes deployment based on Paul Bouwer's  ([test deployment](https://github.com/paulbouwer/hello-kubernetes))
 
 ```yaml
@@ -154,7 +153,7 @@ spec:
 
 ---
 
-## 5. Hello Kubernetes Service (LoadBalancer)
+## 6. Hello Kubernetes Service (LoadBalancer)
 
 Create a LoadBalancer service for the deployment and add the label required by the L2Announcement policy.
 
