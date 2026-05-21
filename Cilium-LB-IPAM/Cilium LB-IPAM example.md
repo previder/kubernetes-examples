@@ -49,7 +49,9 @@ This ensures that Cilium can advertise LoadBalancer IPs at Layer 2.
 ## Add RBAC permissions for L2 lease management
 
 Cilium requires access to **leases.coordination.k8s.io** in the **kube-system** namespace to claim the L2 announcement lease.
-The default **ClusterRole cilium** does not include these permissions.
+The default **ClusterRole cilium** does not include these permissions, which prevents Cilium from claiming the lease.
+
+You can fix this by applying the following JSON patch, which adds the missing RBAC rule without modifying any existing rules:
 ```bash
 kubectl patch clusterrole cilium --type='json' -p '
 [
@@ -154,7 +156,7 @@ spec:
 
 ## 5. Hello Kubernetes Service (LoadBalancer)
 
-Important: ensure the label required under the L2 policy is added.”
+Create a LoadBalancer service for the deployment and add the label required by the L2Announcement policy.
 
 ```yaml
 apiVersion: v1
