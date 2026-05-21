@@ -110,10 +110,10 @@ spec:
   serviceSelector:
     matchLabels:
        advertise: "true"
-   nodeSelector:
-     matchExpressions:
-       - key: node-role.kubernetes.io/control-plane
-         operator: DoesNotExist
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
 
 ```
 
