@@ -44,8 +44,35 @@ kubectl -n kube-system patch configmap cilium-config \
   --type merge \
   -p '{"data":{"enable-l2-announcements":"true"}}'
 ```
+This ensures that Cilium can advertise LoadBalancer IPs at Layer 2.
+
+## Add RBAC permissions for L2 lease management
+
+Cilium requires access to **leases.coordination.k8s.** io in the **kube-system** namespace to claim the L2 announcement lease.
+The default **ClusterRole cilium** does not include these permissions.
+```bash
+kubectl patch clusterrole cilium --type='json' -p '
+[
+  {
+    "op": "add",
+    "path": "/rules/-",
+    "value": {
+      "apiGroups": ["coordination.k8s.io"],
+      "resources": ["leases"],
+      "verbs": ["get", "list", "watch", "create", "update", "patch"]
+    }
+  }
+]
+'
+```
+This patch:
+
+    - Adds one new RBAC rule
+    - Leaves all existing rules untouched
+    - Avoids overwriting the entire ClusterRole
 
 Then restart Cilium to activate the change:
+
 ```bash
 kubectl -n kube-system rollout restart ds/cilium
 ```
