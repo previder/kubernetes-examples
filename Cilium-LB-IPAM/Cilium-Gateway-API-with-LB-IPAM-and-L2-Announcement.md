@@ -82,7 +82,7 @@ Install the standard Gateway API CRDs:
 
 ```bash
 kubectl apply \
--f https://github.com/kubernetes-sigs/gateway-api/releases/latest/download/standard-install.yaml
+-f http://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
 ```
 
 Verify:
