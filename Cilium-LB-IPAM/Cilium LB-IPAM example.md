@@ -161,6 +161,8 @@ Create a LoadBalancer service for the deployment and add the label required by t
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    kube-vip.io/ignore: "true"
   name: hello-kubernetes
   labels:
     advertise: "true"
