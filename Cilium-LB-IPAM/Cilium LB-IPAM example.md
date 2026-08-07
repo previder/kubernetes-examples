@@ -178,7 +178,7 @@ spec:
 
 👉 This LoadBalancer service automatically gets an external IP from the pool (`192.168.123.200-210`).
 
-Note: PKE clusters also uses kube-vip for high availability. To prevent kube-vip from managing LoadBalancer Services and assigning the VIP to the node interface, add the following annotation to Services managed by Cilium:
+**Note:** When a cluster uses **kube-vip** alongside **Cilium**, kube-vip must be prevented from managing Services that are handled by Cilium. Add the following annotation to `LoadBalancer` Services managed by Cilium:
 
 ```yaml
 metadata:
@@ -187,7 +187,7 @@ metadata:
 
 ```
 
-This ensures that the LoadBalancer IP is managed exclusively by Cilium LB IPAM and Cilium L2 Announcements, preventing the VIP from being added as a /32 address on the node's network interface.
+This ensures that the LoadBalancer IP is managed exclusively by Cilium LB IPAM and advertised through Cilium L2 Announcements, preventing kube-vip from assigning the VIP as a /32 address on the node's network interface.
 
 ---
 
