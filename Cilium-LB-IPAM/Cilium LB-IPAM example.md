@@ -14,18 +14,21 @@ When using **Cilium LB-IPAM** in combination with a **firewall**, Cilium assigns
 
 ```mermaid
 flowchart LR
-    Internet -->|TCP/80| Firewall[Firewall]
-    Firewall -->|Forward to 192.168.123.200| CiliumLB["LoadBalancer IP (192.168.123.200)"]
-    
+    Internet --> Firewall["Firewall <br/>External IP"]
+    Firewall -->|NAT TCP/80| IP["192.168.x.x"]
+    IP --> CiliumLB["Cilium LoadBalancer"]
+
+    CiliumLB --> Service["Service"]
+
     subgraph Pods
-        Pod1[hello-world pod 1]
-        Pod2[hello-world pod 2]
-        Pod3[hello-world pod 3]
+        Pod1["hello-world <br/>Pod 1"]
+        Pod2["hello-world <br/>Pod 2"]
+        Pod3["hello-world <br/>Pod 3"]
     end
-    
-    CiliumLB --> Pod1
-    CiliumLB --> Pod2
-    CiliumLB --> Pod3
+
+    Service --> Pod1
+    Service --> Pod2
+    Service --> Pod3
 
 
 
