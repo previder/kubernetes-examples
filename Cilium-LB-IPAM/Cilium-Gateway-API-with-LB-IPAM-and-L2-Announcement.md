@@ -326,8 +326,8 @@ spec:
 Apply:
 
 ```bash
-kubectl apply -f hello-app-1-deployment.yaml`
-kubectl apply -f hello-app-1-service.yaml`
+kubectl apply -f hello-app-1-deployment.yaml
+kubectl apply -f hello-app-1-service.yaml
 ```
 ---
 
@@ -378,8 +378,8 @@ spec:
 Apply:
 
 ```bash
-kubectl apply -f hello-app-2-deployment.yaml`
-kubectl apply -f hello-app-2-service.yaml`
+kubectl apply -f hello-app-2-deployment.yaml
+kubectl apply -f hello-app-2-service.yaml
 ```
 
 ---
