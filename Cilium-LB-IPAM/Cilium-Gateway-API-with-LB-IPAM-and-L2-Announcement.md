@@ -24,7 +24,8 @@ The final architecture:
 
 ```mermaid
 flowchart LR
-    Client --> IP["192.168.1.240"]
+    Client --> Firewall["Firewall<br/>External IP"]
+    Firewall -->|NAT| IP["192.168.x.x"]
     IP --> L2["Cilium L2 Announcement"]
     L2 --> Gateway["Cilium Gateway API"]
 
