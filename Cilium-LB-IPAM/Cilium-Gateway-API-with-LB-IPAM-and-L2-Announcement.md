@@ -57,7 +57,6 @@ This guide assumes:
 - Cilium installed
 - Cilium LB-IPAM enabled
 - Cilium L2 Announcement enabled
-- Helm based Cilium installation
 
 Check Cilium:
 
@@ -231,20 +230,16 @@ The Gateway will automatically receive an IP address from the existing Cilium LB
 
 Create:
 
-`02-gateway.yaml`
+`gateway.yaml`
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
-
 metadata:
   name: demo-gateway
-
 spec:
   gatewayClassName: cilium
-
   listeners:
-
   - name: http
     protocol: HTTP
     port: 80
@@ -253,7 +248,7 @@ spec:
 Apply:
 
 ```bash
-kubectl apply -f 02-gateway.yaml
+kubectl apply -f gateway.yaml
 ```
 
 Check:
@@ -266,7 +261,6 @@ Example:
 
 ```
 NAME            ADDRESS
-
 demo-gateway    192.168.1.240
 ```
 
@@ -299,156 +293,95 @@ Each application has its own Service.
 
 Create:
 
-`03-hello-app-1.yaml`
+`hello-app-1.yaml`
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: hello-app-1
-
-
 spec:
-
   replicas: 2
-
   selector:
     matchLabels:
       app: hello-app-1
-
-
   template:
-
     metadata:
-
       labels:
         app: hello-app-1
-
-
     spec:
-
       containers:
-
       - name: hello-kubernetes
-
         image: paulbouwer/hello-kubernetes:1.10
-
         env:
-
         - name: MESSAGE
-
           value: "Hello from application 1"
-
 
 ---
 apiVersion: v1
 kind: Service
-
 metadata:
-
   name: hello-app-1
-
-
 spec:
-
   selector:
-
     app: hello-app-1
-
-
   ports:
-
   - port: 80
-
     targetPort: 8080
 ```
 
 Apply:
 
 ```bash
-kubectl apply -f 03-hello-app-1.yaml
+kubectl apply -f hello-app-1.yaml
 ```
-
 ---
 
 ## Application 2
 
 Create:
 
-`04-hello-app-2.yaml`
+`hello-app-2.yaml`
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: hello-app-2
-
-
 spec:
-
   replicas: 2
-
-
   selector:
-
     matchLabels:
-
       app: hello-app-2
-
-
   template:
-
     metadata:
-
       labels:
-
         app: hello-app-2
-
-
     spec:
-
       containers:
-
       - name: hello-kubernetes
-
         image: paulbouwer/hello-kubernetes:1.10
-
         env:
-
         - name: MESSAGE
-
           value: "Hello from application 2"
-
 
 ---
 apiVersion: v1
 kind: Service
-
 metadata:
-
   name: hello-app-2
-
-
 spec:
-
   selector:
-
     app: hello-app-2
-
-
   ports:
-
   - port: 80
-
     targetPort: 8080
 ```
 
 Apply:
 
 ```bash
-kubectl apply -f 04-hello-app-2.yaml
+kubectl apply -f hello-app-2.yaml
 ```
 
 ---
@@ -465,7 +398,6 @@ app1.example.local
         |
  hello-app-1
 
-
 app2.example.local
         |
         |
@@ -478,42 +410,28 @@ app2.example.local
 
 Create:
 
-`05-route-app-1.yaml`
+`route-app-1.yaml`
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
-
 metadata:
-
   name: hello-app-1-route
-
-
 spec:
-
   parentRefs:
-
   - name: demo-gateway
-
-
   hostnames:
-
   - "app1.example.local"
-
-
   rules:
-
   - backendRefs:
-
     - name: hello-app-1
-
       port: 80
 ```
 
 Apply:
 
 ```bash
-kubectl apply -f 05-route-app-1.yaml
+kubectl apply -f route-app-1.yaml
 ```
 
 ---
@@ -522,42 +440,28 @@ kubectl apply -f 05-route-app-1.yaml
 
 Create:
 
-`06-route-app-2.yaml`
+`route-app-2.yaml`
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
-
 metadata:
-
   name: hello-app-2-route
-
-
 spec:
-
   parentRefs:
-
   - name: demo-gateway
-
-
   hostnames:
-
   - "app2.example.local"
-
-
   rules:
-
   - backendRefs:
-
     - name: hello-app-2
-
       port: 80
 ```
 
 Apply:
 
 ```bash
-kubectl apply -f 06-route-app-2.yaml
+kubectl apply -f route-app-2.yaml
 ```
 
 ---
@@ -663,7 +567,6 @@ Example:
 DHCP range:
 
 192.168.1.50 - 192.168.1.200
-
 
 Cilium LoadBalancer pool:
 
