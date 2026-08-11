@@ -201,9 +201,7 @@ NAME     CONTROLLER                     ACCEPTED   AGE
 cilium   io.cilium/gateway-controller   True       ...
 ```
 
-The ACCEPTED status must be True before continuing.
-
-If the status is Unknown, restart the Cilium Operator:
+If the ACCEPTED status remains Unknown, first verify that all required Gateway API CRDs are installed and that the Cilium Operator is running. If the CRDs were installed after the Cilium Operator started, restart the Cilium Operator:
 
 ```bash
 kubectl -n kube-system rollout restart deployment/cilium-operator
@@ -262,10 +260,11 @@ Example:
 NAME            ADDRESS          PROGRAMMED    AGE
 demo-gateway    192.168.1.240    True          ...
 ```
+The Gateway must have an assigned IP address and the PROGRAMMED status must be True before continuing.
 
 ---
 
-# 5. Deploy hello-kubernetes applications
+# 5. Deploy example applications
 
 We will deploy two applications:
 
@@ -273,6 +272,8 @@ We will deploy two applications:
 - hello-app-2
 
 Each application has its own Service.
+
+The applications in this section are only used to demonstrate HTTP routing and can be replaced by your own applications and Services.
 
 ---
 
