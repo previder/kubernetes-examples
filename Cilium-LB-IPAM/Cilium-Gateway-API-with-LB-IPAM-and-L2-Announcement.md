@@ -115,7 +115,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml
 ```
-Note: The TLSRoute CRD is not included above because it is an experimental Gateway API resource. If TLS passthrough using TLSRoute is required, install the additional TLSRoute CRD from the experimental Gateway API resources.
+Note: If TLS passthrough using TLSRoute is required, install the additional TLSRoute CRD from the experimental Gateway API resources.
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
