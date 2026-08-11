@@ -172,15 +172,13 @@ The GatewayClass tells Kubernetes which controller manages the Gateway.
 
 Create:
 
-`01-gateway-class.yaml`
+`gateway-class.yaml`
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
-
 metadata:
   name: cilium
-
 spec:
   controllerName:
     io.cilium/gateway-controller
@@ -189,7 +187,7 @@ spec:
 Apply:
 
 ```bash
-kubectl apply -f 01-gateway-class.yaml
+kubectl apply -f gateway-class.yaml
 ```
 
 Verify:
