@@ -136,7 +136,7 @@ tlsroutes gateway.networking.k8s.io
 
 ---
 
-# 2. Enable Cilium Gateway API
+# 2. Verify Cilium Gateway API
 
 Check your Cilium configuration:
 
@@ -380,7 +380,7 @@ kubectl apply -f hello-app-2-service.yaml
 
 # 6. Create HTTPRoutes
 
-Now we connect HTTP traffic to the correct application.
+Now we connect HTTP traffic to the correct application. Replace the hostnames with the hostnames you intend to use for the application.
 
 ---
 
