@@ -65,18 +65,6 @@ This guide assumes:
 - Cilium LB-IPAM enabled
 - Cilium L2 Announcement enabled
 
-Check Cilium:
-
-```bash
-kubectl get pods -n kube-system | grep cilium
-```
-
-Example:
-
-```
-cilium-xxxxx             Running
-cilium-operator-xxxxx    Running
-```
 Before continuing, check which version of Cilium is currently running in the cluster. The Gateway API configuration and required CRDs should be compatible with the installed Cilium version.
 
 Run:
