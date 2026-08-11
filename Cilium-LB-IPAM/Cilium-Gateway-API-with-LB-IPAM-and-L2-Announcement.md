@@ -10,23 +10,15 @@ See the official list of Gateway API implementations:
 
 https://gateway-api.sigs.k8s.io/docs/implementations/list/
 
-## This guide uses Cilium
-
-This guide uses Cilium as the Gateway API implementation, together with Cilium LB-IPAM and L2 Announcement.
-
-The Gateway API resources used in this guide, such as GatewayClass, Gateway and HTTPRoute, are standard Kubernetes resources. Cilium provides the controller that processes these resources.
-
-**Important:** This guide is specifically written and tested for Cilium. Configuration and supported features may differ between Gateway API implementations.
-
-
-
 ## Overview
 
-This guide builds on the Cilium LB-IPAM and L2 Announcement configuration described in the Cilium LB-IPAM example.
+This guide builds on the Cilium LB-IPAM example and uses Cilium as the Gateway API implementation, together with LB-IPAM and L2 Announcement.
 
-The LB-IPAM pool and L2 Announcement configuration must already be available on the cluster. The test application and LoadBalancer Service from the LB-IPAM example are not required for this guide.
+The LB-IPAM pool and L2 Announcement configuration must already be available. The test application and LoadBalancer Service from the LB-IPAM example are not required.
 
-This guide demonstrates how to use Cilium Gateway API to expose multiple Kubernetes applications through a single Gateway IP.
+This guide demonstrates how to expose multiple Kubernetes applications through a single Gateway IP.
+
+**Important:** This guide is specifically written and tested for Cilium. Configuration and supported features may differ between Gateway API implementations.
 
 The final architecture:
 
