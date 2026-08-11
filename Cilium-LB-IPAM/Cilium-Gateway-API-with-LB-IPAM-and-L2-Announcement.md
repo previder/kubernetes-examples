@@ -148,36 +148,21 @@ tlsroutes gateway.networking.k8s.io
 Check your Cilium configuration:
 
 ```bash
-kubectl -n kube-system get configmap cilium-config -o yaml | grep gateway
+kubectl -n kube-system get configmap cilium-config -o yaml | grep enable-gateway-api
 ```
 
-Gateway API must be enabled:
+The expected output is:
 
 ```yaml
 enable-gateway-api: "true"
 ```
 
-If you installed Cilium using Helm:
+If the output shows:
 
 ```bash
-helm get values cilium -n kube-system
+enable-gateway-api: "false"
 ```
-
-You should have:
-
-```yaml
-gatewayAPI:
-  enabled: true
-```
-
-If required:
-
-```bash
-helm upgrade cilium cilium/cilium \
--n kube-system \
---reuse-values \
---set gatewayAPI.enabled=true
-```
+or the setting is not present, Gateway API is not enabled. Do not continue until this has been resolved.
 
 ---
 
