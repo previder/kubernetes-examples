@@ -35,11 +35,13 @@ flowchart LR
     App1 --> Service1["Service"]
     App2 --> Service2["Service"]
 
+subgraph Pods
     Service1 --> Pod1["hello-app-1 <br/>Pod 1"]
     Service1 --> Pod2["hello-app-1 <br/>Pod 2"]
 
     Service2 --> Pod3["hello-app-2 <br/>Pod 1"]
     Service2 --> Pod4["hello-app-2 <br/>Pod 2"]
+end
 ```
 
 ---
