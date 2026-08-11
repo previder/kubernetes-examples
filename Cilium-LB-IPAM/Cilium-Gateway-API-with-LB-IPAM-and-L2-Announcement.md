@@ -12,7 +12,7 @@ https://gateway-api.sigs.k8s.io/docs/implementations/list/
 
 ## Overview
 
-This guide builds on the Cilium LB-IPAM example and uses Cilium as the Gateway API implementation, together with LB-IPAM and L2 Announcement.
+This guide builds on the [Cilium LB-IPAM example](Cilium%20LB-IPAM%20example.md) and uses Cilium as the Gateway API implementation, together with LB-IPAM and L2 Announcement.
 
 The LB-IPAM pool and L2 Announcement configuration must already be available. The test application and LoadBalancer Service from the LB-IPAM example are not required.
 
