@@ -196,14 +196,32 @@ Verify:
 kubectl get gatewayclass
 ```
 
-Expected:
+Expected output:
 
 ```
-NAME      CONTROLLER
-cilium    io.cilium/gateway-controller
+NAME     CONTROLLER                     ACCEPTED   AGE
+cilium   io.cilium/gateway-controller   True       ...
 ```
 
----
+The ACCEPTED status must be True before continuing.
+
+If the status is Unknown, restart the Cilium Operator:
+
+```bash
+kubectl -n kube-system rollout restart deployment/cilium-operator
+```
+
+Wait for the rollout to complete:
+
+```bash
+kubectl -n kube-system rollout status deployment/cilium-operator
+```
+
+Then check the GatewayClass again:
+
+```bash
+kubectl get gatewayclass
+```
 
 # 4. Create Gateway
 
