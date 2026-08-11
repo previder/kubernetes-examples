@@ -28,8 +28,8 @@ flowchart LR
     IP --> L2["Cilium L2 Announcement"]
     L2 --> Gateway["Cilium Gateway API"]
 
-    Gateway --> App1["hello-app-1<br/>app1.example.com"]
-    Gateway --> App2["hello-app-2<br/>app2.example.com"]
+    Gateway --> App1["hello-app-1 <br/>app1.example.com"]
+    Gateway --> App2["hello-app-2 <br/>app2.example.com"]
 
     App1 --> Service1["Service"] --> Pods1["Pods"]
     App2 --> Service2["Service"] --> Pods2["Pods"]
