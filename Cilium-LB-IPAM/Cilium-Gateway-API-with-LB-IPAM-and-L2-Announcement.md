@@ -80,7 +80,7 @@ registry-proxy.previder.io/quay/cilium/cilium:v1.19.4@sha256:2eb67991eaa9368ba19
 
 At the time of writing, this guide is based on Cilium v1.19.4
 
-Important: Always check the Cilium version before proceeding. Use the documentation that corresponds to the installed Cilium version.
+**Important:** Always check the Cilium version before proceeding. Use the documentation that corresponds to the installed Cilium version.
 
 For Cilium v1.19, see the official Cilium Gateway API documentation:
 
@@ -452,7 +452,7 @@ If you are using a registered domain, configure the DNS records for the hostname
 
 Make sure the required NAT rules are configured to forward the incoming traffic to the Kubernetes cluster.
 
-Important: The hostname used to access the application must match the hostname configured in the corresponding HTTPRoute.
+**Important:** The hostname used to access the application must match the hostname configured in the corresponding HTTPRoute.
 
 ## Verify the HTTPRoutes
 
