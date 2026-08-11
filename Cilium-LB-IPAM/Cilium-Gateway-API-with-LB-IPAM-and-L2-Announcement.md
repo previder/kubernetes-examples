@@ -480,7 +480,9 @@ hello-app-2-route   ["app2.example.com"]   ...
 
 Test both applications using their configured hostnames:
 
-curl http://<application-1-hostname>
-curl http://<application-2-hostname>
+```
+curl http://app1.example.com
+curl http://app2.example.com
+```
 
 Each request should be routed through the Cilium Gateway to the corresponding application.
