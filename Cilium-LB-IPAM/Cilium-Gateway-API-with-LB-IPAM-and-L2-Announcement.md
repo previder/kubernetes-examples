@@ -71,6 +71,26 @@ Example:
 cilium-xxxxx             Running
 cilium-operator-xxxxx    Running
 ```
+Before continuing, check which version of Cilium is currently running in the cluster. The Gateway API configuration and required CRDs should be compatible with the installed Cilium version.
+
+Run:
+```bash
+kubectl -n kube-system get pods -l k8s-app=cilium \
+  -o jsonpath='{.items[0].spec.containers[0].image}{"\n"}'
+```
+
+Example output:
+registry-proxy.previder.io/quay/cilium/cilium:v1.19.4@sha256:2eb67991eaa9368ba199c2fac2c573cb0ffdeb79184533344f42fc9a7ff6af3c
+
+In this example, the currently running Cilium version is v1.19.4.
+
+Important: Always check the Cilium version before proceeding. Use the documentation that corresponds to the installed Cilium version.
+
+At the time of writing, this guide is based on Cilium v1.19.
+
+For Cilium v1.19, see the official Cilium Gateway API documentation:
+
+https://docs.cilium.io/en/v1.19/network/servicemesh/gateway-api/gateway-api/
 
 ---
 
@@ -78,14 +98,29 @@ cilium-operator-xxxxx    Running
 
 Gateway API resources are not installed by default in Kubernetes.
 
-Install the standard Gateway API CRDs:
+For Cilium v1.19, the following Gateway API v1.4.1 CRDs are required:
+
+- GatewayClass
+- Gateway
+- HTTPRoute
+- ReferenceGrant
+- GRPCRoute
 
 ```bash
-kubectl apply \
--f http://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_gateways.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml
+```
+Note: The TLSRoute CRD is not included above because it is an experimental Gateway API resource. If TLS passthrough using TLSRoute is required, install the additional TLSRoute CRD from the experimental Gateway API resources.
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
 ```
 
-Verify:
+
+Verify the Gateway API resources
 
 ```bash
 kubectl api-resources | grep gateway
@@ -94,9 +129,15 @@ kubectl api-resources | grep gateway
 Expected:
 
 ```
-gatewayclasses   gateway.networking.k8s.io
-gateways         gateway.networking.k8s.io
-httproutes       gateway.networking.k8s.io
+gateways gateway.networking.k8s.io
+httproutes gateway.networking.k8s.io
+referencegrants gateway.networking.k8s.io
+grpcroutes gateway.networking.k8s.io
+```
+If TLSRoute was installed, it should also appear in the output:
+
+```
+tlsroutes gateway.networking.k8s.io
 ```
 
 ---
