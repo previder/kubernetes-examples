@@ -450,6 +450,37 @@ kubectl apply -f route-app-2.yaml
 
 ---
 
+# 7. Configure DNS and Test HTTPRoutes
 
+Before testing the applications, make sure the hostnames configured in the HTTPRoute resources resolve to the external IP address of the Kubernetes cluster.
 
-Together they provide a modern bare-metal Kubernetes ingress solution.
+If you are using a registered domain, configure the DNS records for the hostnames to point to the external IP address of the cluster.
+
+Make sure the required NAT rules are configured to forward the incoming traffic to the Kubernetes cluster.
+
+Important: The hostname used to access the application must match the hostname configured in the corresponding HTTPRoute.
+
+## Verify the HTTPRoutes
+
+Check the status of the HTTPRoutes:
+
+```bash
+kubectl get httproute
+```
+
+Expected output:
+
+```
+NAME                HOSTNAMES              AGE
+hello-app-1-route   ["app1.example.com"]   ...
+hello-app-2-route   ["app2.example.com"]   ...
+```
+
+## Test the applications
+
+Test both applications using their configured hostnames:
+
+curl http://<application-1-hostname>
+curl http://<application-2-hostname>
+
+Each request should be routed through the Cilium Gateway to the corresponding application.
