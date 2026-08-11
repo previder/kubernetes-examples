@@ -22,36 +22,17 @@ This guide demonstrates how to expose multiple Kubernetes applications through a
 
 The final architecture:
 
-```
-                         Client
+```mermaid
+flowchart LR
+    Client --> IP["192.168.1.240"]
+    IP --> L2["Cilium L2 Announcement"]
+    L2 --> Gateway["Cilium Gateway API"]
 
-                            |
-                            |
-                    192.168.1.240
+    Gateway --> App1["hello-app-1<br/>app1.example.com"]
+    Gateway --> App2["hello-app-2<br/>app2.example.com"]
 
-                            |
-                            |
-              Cilium L2 Announcement
-
-                            |
-                            |
-                 Cilium Gateway API
-
-                    /                 \
-
-                   /                   \
-
-        hello-app-1                hello-app-2
-
-        app1.example.com           app2.example.com
-
-                   |                   |
-
-                Service             Service
-
-                   |                   |
-
-                  Pods               Pods
+    App1 --> Service1["Service"] --> Pods1["Pods"]
+    App2 --> Service2["Service"] --> Pods2["Pods"]
 ```
 
 ---
