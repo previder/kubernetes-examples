@@ -4,7 +4,7 @@
 
 About Gateway API
 
-Gateway API is a Kubernetes standard for configuring and managing network traffic. It is implementation-agnostic and is supported by multiple Kubernetes networking solutions, including Cilium, Istio, Envoy Gateway, Traefik and others.
+Gateway API is a Kubernetes standard for configuring and managing network traffic. It can be used with different Kubernetes networking solutions, including Cilium, Istio, Envoy Gateway, Traefik and others.
 
 See the official list of Gateway API implementations:
 
