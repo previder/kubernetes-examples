@@ -22,16 +22,11 @@ The Gateway API resources used in this guide, such as GatewayClass, Gateway and 
 
 ## Overview
 
-This guide is an extension of the Cilium LoadBalancer IPAM example.
+This guide builds on the Cilium LB-IPAM and L2 Announcement configuration described in the Cilium LB-IPAM example.
 
-The goal is to demonstrate how to expose multiple Kubernetes applications using:
+The LB-IPAM pool and L2 Announcement configuration must already be available on the cluster. The test application and LoadBalancer Service from the LB-IPAM example are not required for this guide.
 
-- Cilium LoadBalancer IPAM
-- Cilium L2 Announcement
-- Kubernetes Gateway API
-- HTTPRoute resources
-
-The example uses two `hello-kubernetes` applications behind a single Gateway IP.
+This guide demonstrates how to use Cilium Gateway API to expose multiple Kubernetes applications through a single Gateway IP.
 
 The final architecture:
 
@@ -56,7 +51,7 @@ The final architecture:
 
         hello-app-1                hello-app-2
 
-        app1.example.local         app2.example.local
+        app1.example.com           app2.example.com
 
                    |                   |
 
