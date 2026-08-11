@@ -20,7 +20,7 @@ This guide demonstrates how to expose multiple Kubernetes applications through a
 
 **Important:** This guide is specifically written and tested for Cilium. Configuration and supported features may differ between Gateway API implementations.
 
-The final architecture:
+### Traffic Flow Diagram
 
 ```mermaid
 flowchart LR
