@@ -159,7 +159,7 @@ enable-gateway-api: "true"
 
 If the output shows:
 
-```bash
+```yaml
 enable-gateway-api: "false"
 ```
 or the setting is not present, Gateway API is not enabled. Do not continue until this has been resolved.
