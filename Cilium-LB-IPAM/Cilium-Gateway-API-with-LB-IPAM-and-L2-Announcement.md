@@ -31,8 +31,14 @@ flowchart LR
     Gateway --> App1["hello-app-1 <br/>app1.example.com"]
     Gateway --> App2["hello-app-2 <br/>app2.example.com"]
 
-    App1 --> Service1["Service"] --> Pods1["Pods"]
-    App2 --> Service2["Service"] --> Pods2["Pods"]
+    App1 --> Service1["Service"]
+    App2 --> Service2["Service"]
+
+    Service1 --> Pod1["hello-app-1 <br/>Pod 1"]
+    Service1 --> Pod2["hello-app-1 <br/>Pod 2"]
+
+    Service2 --> Pod3["hello-app-2 <br/>Pod 1"]
+    Service2 --> Pod4["hello-app-2 <br/>Pod 2"]
 ```
 
 ---
