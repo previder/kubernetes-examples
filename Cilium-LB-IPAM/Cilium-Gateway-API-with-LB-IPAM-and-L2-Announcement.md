@@ -1,5 +1,25 @@
 # Cilium Gateway API with LB-IPAM and L2 Announcement
 
+## About Gateway API
+
+About Gateway API
+
+Gateway API is a Kubernetes standard for configuring and managing network traffic. It is implementation-agnostic and is supported by multiple Kubernetes networking solutions, including Cilium, Istio, Envoy Gateway, Traefik and others.
+
+See the official list of Gateway API implementations:
+
+https://gateway-api.sigs.k8s.io/docs/implementations/list/
+
+## This guide uses Cilium
+
+This guide uses Cilium as the Gateway API implementation, together with Cilium LB-IPAM and L2 Announcement.
+
+The Gateway API resources used in this guide, such as GatewayClass, Gateway and HTTPRoute, are standard Kubernetes resources. Cilium provides the controller that processes these resources.
+
+**Important:** This guide is specifically written and tested for Cilium. Configuration and supported features may differ between Gateway API implementations.
+
+
+
 ## Overview
 
 This guide is an extension of the Cilium LoadBalancer IPAM example.
@@ -112,7 +132,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml
 ```
-Note: If TLS passthrough using TLSRoute is required, install the additional TLSRoute CRD from the experimental Gateway API resources.
+**Note:** If TLS passthrough using TLSRoute is required, install the additional TLSRoute CRD from the experimental Gateway API resources.
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
