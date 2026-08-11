@@ -261,20 +261,8 @@ kubectl get gateway
 Example:
 
 ```
-NAME            ADDRESS
-demo-gateway    192.168.1.240
-```
-
-This IP comes from:
-
-```
-CiliumLoadBalancerIPPool
-```
-
-and is advertised by:
-
-```
-CiliumL2AnnouncementPolicy
+NAME            ADDRESS          PROGRAMMED    AGE
+demo-gateway    192.168.1.240    True          ...
 ```
 
 ---
@@ -294,7 +282,7 @@ Each application has its own Service.
 
 Create:
 
-`hello-app-1.yaml`
+`hello-app-1-deployment.yaml`
 
 ```yaml
 apiVersion: apps/v1
@@ -317,7 +305,11 @@ spec:
         env:
         - name: MESSAGE
           value: "Hello from application 1"
+```
 
+`hello-app-1-service.yaml`
+
+```yaml
 ---
 apiVersion: v1
 kind: Service
@@ -334,7 +326,8 @@ spec:
 Apply:
 
 ```bash
-kubectl apply -f hello-app-1.yaml
+kubectl apply -f hello-app-1-deployment.yaml`
+kubectl apply -f hello-app-1-service.yaml`
 ```
 ---
 
@@ -342,7 +335,7 @@ kubectl apply -f hello-app-1.yaml
 
 Create:
 
-`hello-app-2.yaml`
+`hello-app-2-deployment.yaml`
 
 ```yaml
 apiVersion: apps/v1
@@ -365,7 +358,10 @@ spec:
         env:
         - name: MESSAGE
           value: "Hello from application 2"
+```
+`hello-app-2-service.yaml`
 
+```yaml
 ---
 apiVersion: v1
 kind: Service
@@ -382,7 +378,8 @@ spec:
 Apply:
 
 ```bash
-kubectl apply -f hello-app-2.yaml
+kubectl apply -f hello-app-2-deployment.yaml`
+kubectl apply -f hello-app-2-service.yaml`
 ```
 
 ---
@@ -390,20 +387,6 @@ kubectl apply -f hello-app-2.yaml
 # 6. Create HTTPRoutes
 
 Now we connect HTTP traffic to the correct application.
-
-We will use host based routing:
-
-```
-app1.example.local
-        |
-        |
- hello-app-1
-
-app2.example.local
-        |
-        |
- hello-app-2
-```
 
 ---
 
