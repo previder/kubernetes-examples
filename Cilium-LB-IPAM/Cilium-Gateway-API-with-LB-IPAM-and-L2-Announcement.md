@@ -212,7 +212,11 @@ kubectl get gatewayclass
 
 The Gateway is the external entry point.
 
-The Gateway will automatically receive an IP address from the existing Cilium LB-IPAM pool.
+Cilium will create a LoadBalancer Service for the Gateway. The IP address is automatically assigned from the existing Cilium LB-IPAM pool.
+
+The existing L2 Announcement policy selects LoadBalancer Services using the `advertise=true` label. Therefore, the label is propagated to the Gateway's generated LoadBalancer Service through `spec.infrastructure.labels`.
+
+Because kube-vip is also running in the cluster, the generated LoadBalancer Service is additionally marked with `kube-vip.io/ignore: "true"` so that kube-vip does not attempt to manage the VIP.
 
 Create:
 
@@ -225,6 +229,11 @@ metadata:
   name: demo-gateway
 spec:
   gatewayClassName: cilium
+  infrastructure:
+    labels:
+      advertise: "true"
+    annotations:
+      kube-vip.io/ignore: "true"
   listeners:
   - name: http
     protocol: HTTP
