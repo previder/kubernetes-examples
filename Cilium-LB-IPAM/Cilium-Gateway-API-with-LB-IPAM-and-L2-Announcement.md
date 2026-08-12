@@ -214,9 +214,9 @@ The Gateway is the external entry point.
 
 Cilium will create a LoadBalancer Service for the Gateway. The IP address is automatically assigned from the existing Cilium LB-IPAM pool.
 
-The existing L2 Announcement policy selects LoadBalancer Services using the `advertise=true` label. Therefore, the label is propagated to the Gateway's generated LoadBalancer Service through `spec.infrastructure.labels`.
+The existing L2 Announcement policy selects LoadBalancer Services using the `advertise=true` label. We therefore pass this label to the generated Gateway Service using `spec.infrastructure.labels`.
 
-Because kube-vip is also running in the cluster, the generated LoadBalancer Service is additionally marked with `kube-vip.io/ignore: "true"` so that kube-vip does not attempt to manage the VIP.
+Because kube-vip is also running in the cluster, the generated LoadBalancer Service is marked with `kube-vip.io/ignore: "true"` so that kube-vip does not manage the VIP.
 
 Create:
 
