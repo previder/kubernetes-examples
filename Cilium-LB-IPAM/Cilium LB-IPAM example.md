@@ -14,18 +14,21 @@ When using **Cilium LB-IPAM** in combination with a **firewall**, Cilium assigns
 
 ```mermaid
 flowchart LR
-    Internet -->|TCP/80| Firewall[Firewall]
-    Firewall -->|Forward to 192.168.123.200| CiliumLB["LoadBalancer IP (192.168.123.200)"]
-    
+    Internet --> Firewall["Firewall <br/>External IP"]
+    Firewall -->|NAT TCP/80| IP["192.168.x.x"]
+    IP --> CiliumLB["Cilium LoadBalancer"]
+
+    CiliumLB --> Service["Service"]
+
     subgraph Pods
-        Pod1[hello-world pod 1]
-        Pod2[hello-world pod 2]
-        Pod3[hello-world pod 3]
+        Pod1["hello-world <br/>Pod 1"]
+        Pod2["hello-world <br/>Pod 2"]
+        Pod3["hello-world <br/>Pod 3"]
     end
-    
-    CiliumLB --> Pod1
-    CiliumLB --> Pod2
-    CiliumLB --> Pod3
+
+    Service --> Pod1
+    Service --> Pod2
+    Service --> Pod3
 
 
 
@@ -44,8 +47,8 @@ kubectl -n kube-system patch configmap cilium-config \
   --type merge \
   -p '{"data":{"enable-l2-announcements":"true"}}'
 ```
-
 Then restart Cilium to activate the change:
+
 ```bash
 kubectl -n kube-system rollout restart ds/cilium
 ```
@@ -55,12 +58,34 @@ Finally, verify that the EnableL2Announcements variable is set to "true":
 kubectl -n kube-system exec ds/cilium -- cilium-dbg config --all | grep EnableL2Announcements
 ```
 
-## 2. LoadBalancer IP Pool (CiliumLoadBalancerIPPool)
+## 2. Add RBAC permissions for L2 lease management
+
+Cilium requires access to **leases.coordination.k8s.io** in the **kube-system** namespace to claim the L2 announcement lease.
+The default **ClusterRole cilium** does not include these permissions, which prevents Cilium from claiming the lease.
+
+You can fix this by applying the following JSON patch, which adds the missing RBAC rule without modifying any existing rules:
+```bash
+kubectl patch clusterrole cilium --type='json' -p '
+[
+  {
+    "op": "add",
+    "path": "/rules/-",
+    "value": {
+      "apiGroups": ["coordination.k8s.io"],
+      "resources": ["leases"],
+      "verbs": ["get", "list", "watch", "create", "update", "patch"]
+    }
+  }
+]
+'
+```
+
+## 3. LoadBalancer IP Pool (CiliumLoadBalancerIPPool)
 
 Define the IP range that Cilium can use for assigning LoadBalancer services. This must be in the same range that de firewall DHCP server uses, but the adresses cannot be part of the DHCP pool that is configured.
 
 ```yaml
-apiVersion: cilium.io/v2alpha1
+apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
   name: public-pool
@@ -74,7 +99,7 @@ spec:
 
 ---
 
-## 3. L2 Announcement Policy
+## 4. L2 Announcement Policy
 
 ```yaml
 apiVersion: cilium.io/v2alpha1
@@ -87,10 +112,10 @@ spec:
   serviceSelector:
     matchLabels:
        advertise: "true"
-   nodeSelector:
-     matchExpressions:
-       - key: node-role.kubernetes.io/control-plane
-         operator: DoesNotExist
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
 
 ```
 
@@ -98,7 +123,7 @@ spec:
 
 ---
 
-## 4. Hello Kubernetes Deployment
+## 5. Hello Kubernetes Deployment
 For testing deploy a simple Hello Kubernetes deployment based on Paul Bouwer's  ([test deployment](https://github.com/paulbouwer/hello-kubernetes))
 
 ```yaml
@@ -131,13 +156,19 @@ spec:
 
 ---
 
-## 5. Hello Kubernetes Service (LoadBalancer)
+## 6. Hello Kubernetes Service (LoadBalancer)
+
+Create a LoadBalancer service for the deployment and add the label required by the L2Announcement policy.
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    kube-vip.io/ignore: "true"
   name: hello-kubernetes
+  labels:
+    advertise: "true"
 spec:
   type: LoadBalancer
   ports:
@@ -149,6 +180,17 @@ spec:
 ```
 
 👉 This LoadBalancer service automatically gets an external IP from the pool (`192.168.123.200-210`).
+
+**Note:** When a cluster uses **kube-vip** alongside **Cilium**, kube-vip must be prevented from managing Services that are handled by Cilium. Add the following annotation to `LoadBalancer` Services managed by Cilium:
+
+```yaml
+metadata:
+  annotations:
+    kube-vip.io/ignore: "true"
+
+```
+
+This ensures that the LoadBalancer IP is managed exclusively by Cilium LB IPAM and advertised through Cilium L2 Announcements, preventing kube-vip from assigning the VIP as a /32 address on the node's network interface.
 
 ---
 
@@ -187,5 +229,3 @@ hello-kubernetes   LoadBalancer   10.96.45.123    192.168.123.200   80:31234/TCP
 - Each new LoadBalancer service gets an IP from the pool automatically.  
 - No more manual NodePort + NAT configuration in pfSense.  
 - Provides a true LoadBalancer experience on a Vanilla Kubernetes Deployment.  
-
-
