@@ -141,7 +141,7 @@ spec:
 The TCP type has been deprecated and replaced by IP. The current version supports UDP aswell. If The type TCP is configured, it will be automatically replaces by type IP.
 
 ### kubernetes.previder.nl/loadbalancer-proxy-protocol
-When using the load balancer type `TCP`, the traffic is always proxied which makes the stream lose the original client IP. To overcome this, the [PROXY protocol](https://github.com/haproxy/haproxy/blob/master/doc/proxy-protocol.txt) has been an industry standard.   
+When using the load balancer type `IP`, the traffic is always proxied which makes the stream lose the original client IP. To overcome this, the [PROXY protocol](https://github.com/haproxy/haproxy/blob/master/doc/proxy-protocol.txt) has been an industry standard.   
 After enabling this annotation, the load balancer will use the PROXY protocol in its connections, which makes sure your pods will receive the original connection information even though the connection is proxied.
 
 To allow the PROXY protocol, often there needs to be a trusted load balancer IP configured.
@@ -157,7 +157,7 @@ metadata:
   name: my-app
   annotations:
     kubernetes.previder.nl/loadbalancer-experimental: "true"
-    kubernetes.previder.nl/loadbalancer-type: "TCP"
+    kubernetes.previder.nl/loadbalancer-type: "IP"
     kubernetes.previder.nl/loadbalancer-proxy-protocol: "true"
 spec:
   type: LoadBalancer
@@ -217,7 +217,7 @@ Only enable PROXY protocol if the workload explicitly supports it. If your load 
 
 ### kubernetes.previder.nl/loadbalancer-reclaim-address
 
-This annotation only applies to load balancers of type `TCP`.
+This annotation only applies to load balancers of type `IP`.
 
 By default, when a load balancer is deleted, its IP address is reserved for the same cluster for 4 hours. If a new load balancer is created within that period, it can automatically receive a previously released address.
 
@@ -239,7 +239,7 @@ metadata:
   name: my-app
   annotations:
     kubernetes.previder.nl/loadbalancer-experimental: "true"
-    kubernetes.previder.nl/loadbalancer-type: "TCP"
+    kubernetes.previder.nl/loadbalancer-type: "IP"
     kubernetes.previder.nl/loadbalancer-reclaim-address: "NNN.NNN.NNN.NNN"
 spec:
   type: LoadBalancer
@@ -343,7 +343,7 @@ status:
   ingress:
   - hostname: <unique-id>.prod.pke.hosted-by-previder.com
 ```
-For a `TCP` load balancer, the external address is an IP address. The IP status type is `Proxy`, because traffic is proxied through the Previder load balancer before it reaches the Service.
+For an `IP` load balancer, the external address is an IP address. The IP status type is `Proxy`, because traffic is proxied through the Previder load balancer before it reaches the Service.
 
 Example TCP status:
 ``` yaml
@@ -353,7 +353,7 @@ status:
     - ip: <public-ip-address>
       ipMode: Proxy
 ```
-When `ipMode` is `Proxy`, the load balancer does not preserve the original TCP source address by default. If the original client IP is required, enable PROXY protocol and make sure the receiving workload, ingress controller, or proxy is configured to accept it.
+When `ipMode` is `Proxy`, the load balancer does not preserve the original source address by default. If the original client IP is required, enable PROXY protocol and make sure the receiving workload, ingress controller, or proxy is configured to accept it.
 
 ## Debugging
 
