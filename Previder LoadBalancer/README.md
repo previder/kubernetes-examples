@@ -8,6 +8,7 @@
 - [Annotations](#annotations)
     - [kubernetes.previder.nl/loadbalancer-type](#kubernetesprevidernlloadbalancer-type)
         - [Type HTTPS](#type-https)
+        - [Type IP](#type-ip)
         - [Type TCP](#type-tcp)
     - [kubernetes.previder.nl/loadbalancer-proxy-protocol](#kubernetesprevidernlloadbalancer-proxy-protocol)
         - [PROXY protocol Examples](#proxy-protocol-examples)
@@ -64,7 +65,8 @@ This annotation defines the type of load balancer that should be created.
 Possible values are:
 
 - `HTTPS`
-- `TCP`
+- `IP`
+- `TCP` (deprecated and will be automatically replaced by IP)
 
 #### Type HTTPS
 
@@ -102,8 +104,8 @@ NAME    TYPE           CLUSTER-IP      EXTERNAL-IP                              
 my-app  LoadBalancer   NN.NN.NN.NN     <unique-id>.prod.pke.hosted-by-previder.com   80:30579/TCP   31s
 ```
 
-#### Type TCP
-If you want to do the TLS offloading yourself or want to expose a direct TCP service, you can set the annotation to the type `TCP`.
+#### Type IP
+If you want to do the TLS offloading yourself or want to expose a direct TCP or UDP service, you can set the annotation to the type `IP`.
 This changes how the LoadBalancer service is exposed. The `EXTERNAL-IP` field will change to a public IP address when the load balancer is ready.
 The load balancer exposes all ports of the service on this IP address. 
 
@@ -121,7 +123,7 @@ metadata:
   name: my-app
   annotations:
     kubernetes.previder.nl/loadbalancer-experimental: "true"
-    kubernetes.previder.nl/loadbalancer-type: "TCP"
+    kubernetes.previder.nl/loadbalancer-type: "IP"
 spec:
   type: LoadBalancer
   ports:
@@ -134,6 +136,9 @@ spec:
   selector:
     app.kubernetes.io/name: my-app
 ```
+
+#### Type TCP
+The TCP type has been deprecated and replaced by IP. The current version supports UDP aswell. If The type TCP is configured, it will be automatically replaces by type IP.
 
 ### kubernetes.previder.nl/loadbalancer-proxy-protocol
 When using the load balancer type `TCP`, the traffic is always proxied which makes the stream lose the original client IP. To overcome this, the [PROXY protocol](https://github.com/haproxy/haproxy/blob/master/doc/proxy-protocol.txt) has been an industry standard.   
